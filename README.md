@@ -2,7 +2,7 @@
 
 # Toolbox Test
 
-En este repositorio podrán encontrar el desarrollo de la prueba de conocimientos de Toolbox. En las siguientes líneas incluyo información sobre cómo utilizarla y además el detalle de como fue desarrollada paso a paso. Espero sea de su agrado.
+En este repositorio encontrarán mi solución de la prueba de conocimientos de Toolbox. En las siguientes líneas incluyo información sobre cómo utilizarla y además el detalle de como fue desarrollada paso a paso. Espero sea de su agrado.
 
 ## Uso
 Clonar el repositorio. Será necesario contar con Node versión 12 en el sistema.
@@ -264,3 +264,132 @@ Dentro desarrollaremos 3 validaciones:
 2. Si se envía un query parameter text cuyo contenido no tiene un valor palíndromo, debe responder con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "false" }
 
 3. Si se envía una URL con sin query parameters, debe responder con un json que contiene {"error":"no text"}
+
+Entonces, dentro de api.test.js:
+
+Importamos los módulos de supertest y chai
+```js
+const request = require('supertest')
+const expect = require('chai').expect;
+```
+
+Importamos el módulo de app.js (para ello deberemos generar un export en app.js)
+```js
+const app = require('../app.js')
+```
+
+Al final de app.js:
+```js
+...
+module.exports = app
+```
+
+Regresamos a api.test.js y configuramos las 3 validaciones:
+```js
+/** 
+ *  Testeo de endpoint 
+ */ 
+describe("/GET /iecho?text=test", () => { 
+    it('responde con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "true" }, si se envía un request con un query parameter text cuyo contenido tiene un valor palíndromo ', async () =>{ 
+        const query_parameter = "ioi" 
+        const response = await request(app).get('/iecho?text=' + query_parameter) 
+        expect(response.status).to.eql(200); 
+        expect(response.body.text).to.eql(query_parameter.split("").reverse().join("")) 
+        expect(response.body.palindrome).to.eql(true) 
+    }); 
+    it('responde con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "false" }, si se envía un request con un query parameter text cuyo contenido no tiene un valor palíndromo ', async () =>{ 
+        const query_parameter = "test" 
+        const response = await request(app).get('/iecho?text=' + query_parameter) 
+        expect(response.status).to.eql(200); 
+        expect(response.body.text).to.eql(query_parameter.split("").reverse().join("")) 
+        expect(response.body.palindrome).to.eql(false) 
+    }); 
+    it('responde con un json que contiene {"error" : "no text"}, si se envía un request sin query parameters', async () =>{ 
+        request(app).get('/iecho') 
+        const response = await request(app).get('/iecho') 
+        expect(response.status).to.eql(400); 
+        expect(response.body).to.eql({error : "no text"}) 
+    }); 
+})
+```
+
+Finalmente api.test.js queda como:
+```js
+const request = require('supertest') 
+const expect = require('chai').expect; 
+const app = require('../app.js') 
+/** 
+ *  Testeo de endpoint 
+ */ 
+describe("/GET /iecho?text=test", () => { 
+    it('responde con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "true" }, si se envía un request con un query parameter text cuyo contenido tiene un valor palíndromo ', async () =>{ 
+        const query_parameter = "ioi" 
+        const response = await request(app).get('/iecho?text=' + query_parameter) 
+        expect(response.status).to.eql(200); 
+        expect(response.body.text).to.eql(query_parameter.split("").reverse().join("")) 
+        expect(response.body.palindrome).to.eql(true) 
+    }); 
+    it('responde con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "false" }, si se envía un request con un query parameter text cuyo contenido no tiene un valor palíndromo ', async () =>{ 
+        const query_parameter = "test" 
+        const response = await request(app).get('/iecho?text=' + query_parameter) 
+        expect(response.status).to.eql(200); 
+        expect(response.body.text).to.eql(query_parameter.split("").reverse().join("")) 
+        expect(response.body.palindrome).to.eql(false) 
+    }); 
+    it('responde con un json que contiene {"error" : "no text"}, si se envía un request sin query parameters', async () =>{ 
+        request(app).get('/iecho') 
+        const response = await request(app).get('/iecho') 
+        expect(response.status).to.eql(400); 
+        expect(response.body).to.eql({error : "no text"}) 
+    }); 
+})
+```
+
+Ahora, para correr el archivo de validaciones con mocha mediante el comando npm test, haremos una configuración en el archivo package.json:
+```json
+{
+... 
+"scripts": {
+    "start": "nodemon app.js",
+    "test": "mocha tests/api.test.js --exit"
+  },
+...
+}
+```
+(--exit servirá para que, al terminar las validaciones, se cierre el proceso de mocha automáticamente)
+
+Finalmente, si queremos que el código esté en el estilo Standard JS, instalamos el módulo correspondiente de manera local:
+```bash
+npm install standard --save-dev
+```
+
+Y luego lo corremos para ver que partes del código pueden estilizarse:
+```bash
+npx standard
+```
+
+Realizamos las correcciones sugeridas en el terminal. En el caso de los métodos "describe" e "it" que standard js indicará que están indefinidos, deberemos configurarlos como variables globales, de tal manera que el análisis, standard js no los interprete como errados. Entonces, en package.json:
+```json
+{
+...  
+"standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  },
+...
+}
+```
+
+Finalmente, si corremos nuevamente el análisis de standard js con el siguiente comando: 
+```bash
+npx standard
+```
+Veremos que ya no se presentan errores de estilo.
+
+Y con esto concluimos la API
+
+### Frontend
+
+
