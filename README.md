@@ -6,9 +6,9 @@ En este repositorio encontrarán mi solución de la prueba de conocimientos de T
 
 ## Contents
 
-- [Uso](##Uso)
-    - [API](###API)
-    - [Frontend](###Frontend)
+- [Uso](#Uso)
+    - [API](#API)
+    - [Frontend](#Frontend)
 
 
 ## Uso
