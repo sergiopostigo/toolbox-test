@@ -4,6 +4,12 @@
 
 En este repositorio encontrarán mi solución de la prueba de conocimientos de Toolbox. En las siguientes líneas incluyo información sobre cómo utilizarla y además el detalle de como fue desarrollada paso a paso. Espero sea de su agrado.
 
+## Contenido
+
+- [Uso](#Uso)
+- [Uso-de-funcionalidades-opcionales](#Uso-de-funcionalidades-opcionales)
+- [Desarrollo](#Desarrollo)
+
 ## Uso
 Clonar el repositorio. Será necesario contar con Node versión 12 en el sistema.
 
@@ -38,7 +44,7 @@ npm start
 ```
 Se abrirá una aplicación web en el navegador que utilizará el puerto 9000 del localhost. Ya podemos interactuar con nuestra interfaz y probar las funcionalidades solicitadas
 
-## Uso de funcionalidades opcionales
+## Uso-de-funcionalidades-opcionales
 Opcionalmente, se solicitaron algunas funcionalidades que podian abordarse de manera opcional. Estas han sido desarrolladas y se presentan a continuación:
 
 ### API
