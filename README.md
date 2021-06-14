@@ -472,7 +472,6 @@ Es importante mencionar que inicialmente el estado será un arreglo vacío, como
 Como vemos en el código, el flag que le indicará al reducer a que cambio/evento someter al estado será el objeto action por medio del atributo type. Además, el objeto action traerá consigo otros atributos de acuerdo al cambio/evento que se vaya a dar. Por ejemplo, si se da el cambio/evento 'NUEVO_TEXTO', action deberá traer un atributo text, que será el que contenga el texto a agregar al arreglo. O por ejemplo, si se da el cambio/evento 'SIN_TEXTO', action deberá traer un atributo error, que será el que contenga el texto "no text" a agregar al arreglo.
 
 Como vimos, los reducers generán algún evento o cambio con el estado del arreglo de acuerdo a lo que hagamos en la interfaz. La entidad que se encarga de tomar las peticiones de la interfaz y enviarlas a un reducer se llama action. Una action es esencialmente una función que devuelve un objeto con el tipo de cambio/evento al que debe someterse un estado. En nuestro caso, habrán dos actions, aquella que realice la petición  'NUEVO_TEXTO' y la otra de 'SIN_TEXTO'.  Además, estas actions deberán contener adicionalmente los atributos text y error respectivamente. Entonces, dentro de la carpeta actions, creamos un archivo index.js y dentro implementamos las dos actions:
-
 ```js
 export const add_text = (text) => { 
     return { 
@@ -491,5 +490,162 @@ export const no_text = (error) => {
 Hasta el momento tenemos implementados:
 * el reducer que nos permite crear el estado del arreglo de textos y todos los cambios/eventos a los que podría ser sometido
 * las actions que nos permiten comunicarle al reducer qué cambio/evento realizar con el estado
+
+Finalmente, deberemos crear una entidad que almacene todos los reducers del proyecto y a la cual se pueda acceder para consumir los estados desde cualquier componente. Dicha entidad se llama store. Hay una función que nos permite crear un store llamada createStore() que recibe solo un argumento. Si en nuestro proyecto tuviéramos varios reducers, tendríamos que combinarlos en un solo objeto para poder utilizarlo como argumento en createStore(). Y si bien en nuestro proyecto tenemos un solo reducer que podríamos colocar directamente como argumento en createStore(), es una buena práctica crear un objeto que incluya ese reducer, por si en el futuro creamos más reducers podamos añadirlos a ese objeto. Para ello dentro de reducers creamos el archivo index.js y allí creamos el objeto que combine todos los reducers (en nuestro caso, un solo reducer):
+```js
+import textListReducer from './textList'
+import {combineReducers} from 'redux'
+const allReducers = combineReducers({
+    textList : textListReducer
+})
+export default allReducers
+```
+
+Bien, ahora crearemos el store. Para ello, dentro de la carpeta store, creamos un archivo index.js y dentro:
+```js
+import { createStore } from 'redux'
+import allReducers from '../reducers'
+const store = createStore(allReducers)
+export default store
+```
+Como vemos, importamos el objeto allReducers que contiene todos los reducers del proyecto y con ello creamos el store
+
+Ahora, para poder acceder a los estados de store en cualquier parte del proyecto, vamos al archivo index.js dentro de la carpeta src y lo modificamos de la siguiente manera:
+```js
+import React from 'react'; 
+import ReactDOM from 'react-dom'; 
+import './index.css'; 
+import App from './App'; 
+//Redux 
+import store from './redux/store' 
+import { Provider } from 'react-redux' 
+ReactDOM.render( 
+    <Provider store={store}> 
+      <App /> 
+    </Provider>,  
+    document.getElementById('root') 
+);
+```
+
+Como vemos, App que es el componente raíz del proyecto está contenido dentro del componente Provider, al cual además se le da como atributo la entidad store. De esta manera, se puede acceder a los estados de store desde el componente App y cualquier subcomponente de este. 
+
+Pasamos ahora a crear el componente TextList que, como mencionamos antes, se encargará de imprimir en la interfaz la lista de textos. Esta lista de textos está almacenada como arreglo en un estado de store, por lo tanto, para acceder a este utilizaremos la función useSelector de react-redux y le indicaremos que estado consumir. Por otro lado, utilizaremos el componente Card de react-bootstrap para que contenga cada uno de los textos del arreglo. Se imprimirá un Card por cada texto dentro del arreglo:
+
+```js
+import React from 'react'
+import { Card } from 'react-bootstrap'
+
+// Redux
+import { useSelector } from 'react-redux'
+function TextList() {
+    const textList = useSelector(state => state.textList )
+    return (
+        <div className="row justify-content-center pb-5">
+            <div className="col-8 pb-5">
+                {
+                    textList.map((text, index) =>
+                        <Card className="my-2" key={index}>
+                            <Card.Body className='p-2'>{text}</Card.Body>
+                        </Card>
+                    )
+                }
+            </div>
+        </div>
+    )
+}
+export default TextList
+```
+
+Luego, pasamos a programar el componente App.js. Aquí estableceremos la comunicación con la API. La idea es que cuando el usuario de click a un botón, se haga un API call cuya respuesta sea utilizada para cambiar el estado del arreglo de textos lo cual deberá modificar lo impreso por el componente TextList, el cual importaremos. Para ello, creamos un formulario con los componentes de bootstap Form.Control que no es más que un input de texto y Button que será el botón que nos permita hacer el submit del formulario (Form).  Obviamente, deberemos crear un evento onSubmit que llamará la función encargada de hacer el API Call y modificar el estado del arreglo de textos. Para modificar el estado utilizaremos la función useDispatch que nos permite seleccionar que action debe realizar el reducer del estado correspondiente. Entonces:
+```js
+import './App.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import React, { useState } from 'react' 
+import { Navbar, Form, Button } from 'react-bootstrap' 
+import TextList from './components/TextList/TextList' 
+// Redux 
+import { useDispatch } from 'react-redux' 
+import { add_text, no_text } from './redux/actions' 
+function App() { 
+  // Variable para almacenar el texto tipeado por el usuario 
+  const [textInput, setTextInput] = useState('') 
+  // Función para seleccionar un action de Redux 
+  const dispatch = useDispatch() 
+  // Función que se activará cuando se presione el botón Submit 
+  const handleSend = async (event) => { 
+    // Para evitar que la página haga un refresh al hacer submit de formulario 
+    event.preventDefault(); 
+    //Api Call 
+    fetch(`http://localhost:3000/iecho?text=${textInput}`) 
+    .then(response => response.json()) 
+    .then(data => { 
+      if(data.text){ 
+        dispatch(add_text(data.text)) 
+      }else{ 
+        dispatch(no_text(data.error)) 
+      } 
+      setTextInput('') 
+    }); 
+  } 
+  return ( 
+    <div className="App"> 
+      <div className="bg-light pb-5 min-vh-100"> 
+        <Navbar className="bg-danger justify-content-center py-3"> 
+          <Form inline onSubmit={handleSend} className="w-100  w-md-50 justify-content-center"> 
+            <Form.Control 
+              type="text" 
+              placeholder="Insert Text" 
+              className="mr-4 w-50" 
+              value={textInput} 
+              onChange={e => setTextInput(e.target.value)} 
+            /> 
+            <Button type="submit" className="px-3 px-md-5" >Send</Button> 
+          </Form> 
+        </Navbar> 
+        <div className="container bg-white text-left pb-5"> 
+          <div className="row justify-content-center pt-5 mt-5"> 
+            <div className="col-11"> 
+              <h3>Results:</h3> 
+            </div> 
+          </div> 
+          <TextList/> 
+        </div> 
+      </div> 
+    </div> 
+  ); 
+} 
+export default App;
+```
+
+Si iniciamos el servidor de la API y la aplicación de frontend (npm start), veremos que el proyecto ya esta funcionando correctamente.
+
+Si se desea realizar tests unitarios para el frontend, podemos hacerlo con Jest y React Testing Library, que vienen incluidos automáticamente cuando se crea el proyecto con create-react-app. Implementaremos un test que verifique si los elementos del componente raiz App se renderizan correctamente, para ello utilizaremos el matcher de Jest  toBeInTheDocument(). Elegiremos 3 elementos a verificar:
+
+* El renderizado del texto "Results:"
+* El renderizado del botón "Send" 
+* El  rendrizado del textbox con el placeholder "Insert Text"
+
+Implementamos este test en el archivo App.test.js en src que se incluyó automáticamente al crear el proyecto. Lo modificamos de la siguiente manera:
+```js
+import React from 'react'
+import { screen, render, fireEvent } from '@testing-library/react'
+import App from './App'
+
+describe("Tests del componente App", () => {
+  test("renderiza el componente App", () => {
+    render(<App/>);
+    expect(screen.getByText(/Results:/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Send'})).toBeInTheDocument()
+    expect(screen.getByRole('textbox', {placeholder: 'Insert Text'})).toBeInTheDocument()
+  });
+})
+```
+
+Para realizar el esteo ejecutamos el comando:
+```bash
+npm test
+```
+
+Con esto hemos concluido el Frontend
 
 
