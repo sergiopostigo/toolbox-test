@@ -1,0 +1,29 @@
+{
+  "name": "toolbox-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "mocha tests/api.test.js --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mocha": "^9.0.0",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}
