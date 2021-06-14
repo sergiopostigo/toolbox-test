@@ -168,7 +168,99 @@ app.listen(3000, ()=>{
     console.log('El servidor está corriendo en  http://localhost:3000') 
 })
 ```
+Ahora si accedemos a la URL   http://localhost:3000/iecho?text=test , veremos que se imprime la palabra "test" en el navegador.
 
+Necesitamos ahora que, en caso se envíe el query parameter text, la API provea una respuesta 200 con un json que contenga dicho el valor del query parameter text pero invertido o escrito de derecha a izquierda { "text": (query parameter invertido) }. Además, en caso el query parameter enviado tenga un valor palíndromo, este deberá responder con un flag con el nombre palindrome que sea true o false, según sea el caso: { "text": (query parameter invertido), "palindrome" : (true o false} 
 
+Y en caso no se envíe el query parameter text, la API deberá proveer una respuesta 400 y un json que que indique: "error": "no text". 
+```js
+const express = require('express') 
+const app = express() 
+/** 
+ *  Endpoint 
+ */ 
+app.get('/iecho', (req, res) => { 
+  if (req.query.text) { 
+    const text = req.query.text.split('').reverse().join('') 
+    // Analizamos si es o no un palíndromo 
+    if (req.query.text === text) { 
+      return res.status(200).json({ 
+        text: text, 
+        palindrome: true 
+      }) 
+    } else { 
+      return res.status(200).json({ 
+        text: text, 
+        palindrome: false 
+      }) 
+    } 
+  } else { 
+    return res.status(400).json({ 
+      error: 'no text' 
+    }) 
+  } 
+}) 
+app.listen(3000, () => { 
+  console.log('El servidor está corriendo en http://localhost:3000') 
+})
+```
 
+Cuando  mas adelante empecemos a hacer llamadas desde el Frontend al Backend/API, deberá ser necesario que configuremos el CORS, que por defecto, bloqueará todas las peticiones externas. Instalamos una libreria para ello:
+```bash
+npm install cors
+```
 
+Importamos la librería en app.js y definimos los permisos (usaremos *, que significa que estará abierta para cualquier URL):
+```js
+const express = require('express')
+const app = express()
+const cors = require('cors')
+
+/**
+ *  Permisos CORS
+ */
+ app.use(cors())
+ app.options('*', cors())
+
+/**
+ *  Endpoint
+ */
+app.get('/iecho', (req, res) => {
+  if (req.query.text) {
+    const text = req.query.text.split('').reverse().join('')
+    // Analizamos si es o no un palíndromo
+    if (req.query.text === text) {
+      return res.status(200).json({
+        text: text,
+        palindrome: true
+      })
+    } else {
+      return res.status(200).json({
+        text: text,
+        palindrome: false
+      })
+    }
+  } else {
+    return res.status(400).json({
+      error: 'no text'
+    })
+  }
+})
+app.listen(3000, () => {
+  console.log('El servidor está corriendo en http://localhost:3000')
+})
+```
+
+Ahora, para realizar el testeo de validación de la API utilizaremos Mocha + Chai + Supertest
+```bash
+npm install mocha chai supertest
+```
+Dentro de la carpeta del proyecto creamos una subcarpeta con el nombre "tests" y dentro creamos un archivo llamado api.test.js
+
+Dentro desarrollaremos 3 validaciones:
+
+1. Si se envía un query parameter text cuyo contenido tiene un valor palíndromo, debe responder con un json que  contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "true" }
+
+2. Si se envía un query parameter text cuyo contenido no tiene un valor palíndromo, debe responder con un json que contiene {"text" : (query parameter escrito de derecha a izquierda), "palindrome : "false" }
+
+3. Si se envía una URL con sin query parameters, debe responder con un json que contiene {"error":"no text"}
