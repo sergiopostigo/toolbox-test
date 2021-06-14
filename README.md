@@ -4,15 +4,6 @@
 
 En este repositorio encontrarán mi solución de la prueba de conocimientos de Toolbox. En las siguientes líneas incluyo información sobre cómo utilizarla y además el detalle de como fue desarrollada paso a paso. Espero sea de su agrado.
 
-## Contents
-
-- [Uso](#Uso)
-    - [API](#API)
-    - [Frontend](#Frontend)
-- [Uso de funcionalidades opcionales](#Uso de funcionalidades opcionales)
-    - [API](#API)
-    - [Frontend](#Frontend)
-
 ## Uso
 Clonar el repositorio. Será necesario contar con Node versión 12 en el sistema.
 
