@@ -392,4 +392,55 @@ Y con esto concluimos la API
 
 ### Frontend
 
+Primero nos posicionamos en la carpeta que almacenará el proyecto.
+
+Luego, en la terminal ejecutamos el comando para crear el boilerplate o plantilla de desarrollo que incluirá la estructura de carpetas y archivos de la aplicación en React. Llamaremos al proyecto "toolbox-interfaz":
+```bash
+npx create-react-app toolbox-interfaz
+```
+
+Veremos que se crea una carpeta raiz con una serie de subcarpetas y archivos que nos permitirán desarrollar nuestra aplicación en React.  Es importante mencionar que el comando create-react-app configura automáticamente **Webpack** y Babel en la aplicación, de modo que ya no tenemos que instalarlos y configurarlos manualmente.
+
+Dentro de la carpeta raíz crearemos un archivo llamado .env que servirá para almacenar variables de entorno. Dentro del archivo escribimos:
+```js
+PORT = 9000
+```
+Eso es necesario porque, por defecto, React utiliza el puerto 3000 para correr la aplicación, pero como ya usamos ese puerto para el Backend, definimos el puerto 9000. Dado que el nombre de variable PORT ya esta reservado para el puerto, no hará falta ninguna otra configuración.
+
+Por otro lado, dentro de la carpeta src crearemos una subcarpeta llamada components, que almacenará los componentes de la aplicación
+
+Para desarrollar la interfaz, utilizaremos el framework de frontend Bootstrap:
+```bash
+npm install react-bootstrap bootstrap@4.6.0
+```
+
+Modificamos el archivo App.js e importamos el archivo de estilos css de bootstrap:
+```js
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+function App() {
+  return (
+    <div className="App">
+    </div>
+  );
+}
+export default App;
+```
+
+La interfaz que se solicita es la siguiente:
+
+![alt text](https://i.ibb.co/JnK7nQ8/1.png) 
+
+La idea es que cada vez que se escriba un texto y se envíe con el botón "Send", se realice un request a nuestra API y esta responda con el texto invertido. En caso se presione el botón "Send" sin haber escrito ningún texto, nuestra API deberá responder con "no text", como vimos anteriormente. En ambos casos, la respuesta deberá imprimirse en la zona de "Results:", desplazando hacia abajo respuestas anteriores.
+
+Si bien la interfaz tiene pocos elementos, será conveniente crear un componente que contenga la lista de textos que se vayan imprimiendo. Lo demás podemos mantenerlo en App.js
+
+![alt text](https://i.ibb.co/R2FfCkn/2.png) 
+
+
+
+
+
+
 
