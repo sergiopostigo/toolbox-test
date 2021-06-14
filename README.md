@@ -438,9 +438,58 @@ Si bien la interfaz tiene pocos elementos, será conveniente crear un componente
 
 ![alt text](https://i.ibb.co/R2FfCkn/2.png) 
 
+Dentro de la carpeta components, creamos el componente TextList. Este componente (resaltado en la imagen superior) deberá consumir la lista de textos recibidos desde la API e imprimirlos. Por lo tanto, una forma de abordar esto podría ser utilizar Redux para crear un estado que contenga un arreglo con todos los textos y pueda ser accesible desde TextList. Evidentemente, cada vez que presionemos el botón y recibamos una respuesta de la API con un texto, este deberá ser agregado al arreglo. Esto último lo haremos en App.js.
 
+Entonces, lo primero que haremos es instalar Redux y React-Redux:
+```bash
+npm install redux react-redux
+```
 
+Luego, dentro de la carpeta src creamos una subcarpeta llamada redux. Dentro creamos otras carpetas llamadas store, actions y reducers.
 
+Dentro de la carpeta reducers crearemos un archivo llamado textList.js . Un reducer es esencialmente una entidad que nos permite crear un estado, definir su valor inicial e implementar todos los cambios/eventos a los cuales podría ser sometido o usado el estado. En nuestro caso, crearemos un reducer para el arreglo de textos y además definiremos dos posibles cambios/eventos  los cuales podría someterse:
 
+1. 'NUEVO_TEXTO' : En caso el usuario escriba un texto y presione el botón, la API responderá con el texto invertido. Esta texto invertido deberá agregarse al estado con el arreglo.
+
+2. 'SIN_TEXTO' : En caso el usuario no escriba ningún texto y presione el botón, la API responderá con un texto de "no text", el cual deberá agregarse al estado con el arreglo.
+
+```js
+const textListReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'NUEVO_TEXTO':
+            return [action.text, ...state]
+        case 'SIN_TEXTO':
+            return [action.error, ...state]
+        default:
+            return state
+    }
+}
+export default textListReducer
+```
+
+Es importante mencionar que inicialmente el estado será un arreglo vacío, como lo definimos en el código.
+
+Como vemos en el código, el flag que le indicará al reducer a que cambio/evento someter al estado será el objeto action por medio del atributo type. Además, el objeto action traerá consigo otros atributos de acuerdo al cambio/evento que se vaya a dar. Por ejemplo, si se da el cambio/evento 'NUEVO_TEXTO', action deberá traer un atributo text, que será el que contenga el texto a agregar al arreglo. O por ejemplo, si se da el cambio/evento 'SIN_TEXTO', action deberá traer un atributo error, que será el que contenga el texto "no text" a agregar al arreglo.
+
+Como vimos, los reducers generán algún evento o cambio con el estado del arreglo de acuerdo a lo que hagamos en la interfaz. La entidad que se encarga de tomar las peticiones de la interfaz y enviarlas a un reducer se llama action. Una action es esencialmente una función que devuelve un objeto con el tipo de cambio/evento al que debe someterse un estado. En nuestro caso, habrán dos actions, aquella que realice la petición  'NUEVO_TEXTO' y la otra de 'SIN_TEXTO'.  Además, estas actions deberán contener adicionalmente los atributos text y error respectivamente. Entonces, dentro de la carpeta actions, creamos un archivo index.js y dentro implementamos las dos actions:
+
+```js
+export const add_text = (text) => { 
+    return { 
+        type: 'NUEVO_TEXTO', 
+        text: text 
+    } 
+} 
+export const no_text = (error) => { 
+    return { 
+        type: 'SIN_TEXTO', 
+        error: error 
+    } 
+}
+```
+
+Hasta el momento tenemos implementados:
+* el reducer que nos permite crear el estado del arreglo de textos y todos los cambios/eventos a los que podría ser sometido
+* las actions que nos permiten comunicarle al reducer qué cambio/evento realizar con el estado
 
 
