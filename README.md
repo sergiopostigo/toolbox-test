@@ -19,7 +19,7 @@ Abrir la ventana de comandos dentro de la carpeta toolbox-api dentro de Backend 
 ```bash
 npm start
 ```
-Con ello, abremos iniciado la API que estará lista para recibir las llamadas del Frontend en el puerto 3000 del localhost.
+Con ello, habremos iniciado la API que estará lista para recibir las llamadas del Frontend en el puerto 3000 del localhost.
 
 #### Tests
 
