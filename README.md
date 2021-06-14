@@ -117,22 +117,57 @@ Y en package.json configuramos el comando de inicio de la aplicacion para que in
 ...
 ```
 
+Ahora damos inicio a la aplicación con el comando:
+```bash
+npm start
+```
 
+En la terminal veremos que se mostrara el mensaje "Hola Toolbox", esto quiere decir que hemos configurado correctamente el servidor. Si cambiamos el texto "Hola Toolbox" en app.js y  guardamos, veremos que en la terminal la aplicación se resetea automáticamente e imprime el nuevo texto, gracias a nodemonitor.
 
+Ahora que ya tenemos preparada nuestra aplicación de Node.js, montaremos encima un server framework para construir la API: Express.js. 
 
+Ahora, dentro de app.js importamos el modulo de express y configuramos el puerto a utilizar para conectarse al servidor. En este caso, utilizaremos el puerto 3000:
 
+```js
+const express = require('express'); 
+const app = express() 
+app.listen(3000, ()=>{ 
+    console.log('El servidor está corriendo en  http://localhost:3000') 
+})
+```
 
+Si abrimos la dirección en el navegador veremos un mensaje "Cannot GET", esto por que no hemos definido aún ninguna ruta o endpoint en el servidor para un GET request. Lo hacemos así:
+```js
+const express = require('express'); 
+const app = express() 
 
+/** 
+ *  Endpoint
+ */
+app.get('/iecho', (req,res) =>{ 
+    res.send('Hola esta es la API de Toolbox!') 
+})
+app.listen(3000, ()=>{  
+    console.log('El servidor está corriendo en  http://localhost:3000')  
+})
+```
+Como vemos, añadimos una ruta o endpoint app.get. Si accedemos a la URL http://localhost:3000/iecho ahora veremos el teto: "Hola esta es la API de Toolbox!"
 
+Ahora, configuraremos el route method para que consuma un query parameter con el nombre "text". Para probar su correcto funcionamiento, hacemos que la respuesta del servidor sea el parámetro enviado:
+```js
+const express = require('express'); 
+const app = express()
 
-
-
-
-
-
-
-
-
+/** 
+ *  Endpoint
+ */ 
+app.get('/iecho', (req,res) =>{ 
+    res.send(req.query.text) 
+})
+app.listen(3000, ()=>{ 
+    console.log('El servidor está corriendo en  http://localhost:3000') 
+})
+```
 
 
 
