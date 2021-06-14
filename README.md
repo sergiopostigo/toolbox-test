@@ -75,7 +75,9 @@ Veremos que no se presentan errores de estilo.
 Como se puede verificar en el código, el proyecto incluye el uso de Redux. Se utilizó para guardar en un estado accesible en todo el proyecto un arreglo que contiene todos los textos de las respuestas de la API.
 Verificar su uso en:
 [toolbox-test/Frontend/toolbox-interfaz/src/redux/](https://github.com/sergiopostigo/toolbox-test/tree/master/Frontend/toolbox-interfaz/src/redux)
+
 [toolbox-test/Frontend/toolbox-interfaz/src/App.js ](https://github.com/sergiopostigo/toolbox-test/blob/master/Frontend/toolbox-interfaz/src/App.js)
+
 [toolbox-test/Frontend/toolbox-interfaz/src/components/TextList/TextList.js](https://github.com/sergiopostigo/toolbox-test/blob/master/Frontend/toolbox-interfaz/src/components/TextList/TextList.js)
 
 
