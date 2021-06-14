@@ -102,11 +102,20 @@ Dentro de la carpeta toolbox-api, creamos un archivo llamado app.js. Dentro de e
 console.log("Hola Toolbox")
 ```
 
+Para resetear automáticamente la aplicación cada vez que algún archivo cambie, utilizaremos la herramienta nodemonitor:
+```bash
+npm install nodemon
+```
 
-
-
-
-
+Y en package.json configuramos el comando de inicio de la aplicacion para que incluya nodemonitor:
+```json
+...  
+"scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+...
+```
 
 
 
