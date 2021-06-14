@@ -7,7 +7,7 @@ En este repositorio encontrarán mi solución de la prueba de conocimientos de T
 ## Contenido
 
 - [Uso](#Uso)
-- [Uso-de-funcionalidades-opcionales](#Uso-de-funcionalidades-opcionales)
+- [Uso de funcionalidades opcionales](#Uso-de-funcionalidades-opcionales)
 - [Desarrollo](#Desarrollo)
 
 ## Uso
@@ -44,7 +44,7 @@ npm start
 ```
 Se abrirá una aplicación web en el navegador que utilizará el puerto 9000 del localhost. Ya podemos interactuar con nuestra interfaz y probar las funcionalidades solicitadas
 
-## Uso-de-funcionalidades-opcionales
+## Uso de funcionalidades opcionales
 Opcionalmente, se solicitaron algunas funcionalidades que podian abordarse de manera opcional. Estas han sido desarrolladas y se presentan a continuación:
 
 ### API
