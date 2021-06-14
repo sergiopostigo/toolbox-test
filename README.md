@@ -9,7 +9,9 @@ En este repositorio encontrarán mi solución de la prueba de conocimientos de T
 - [Uso](#Uso)
     - [API](#API)
     - [Frontend](#Frontend)
-
+- [Uso de funcionalidades opcionales](#Uso de funcionalidades opcionales)
+    - [API](#API)
+    - [Frontend](#Frontend)
 
 ## Uso
 Clonar el repositorio. Será necesario contar con Node versión 12 en el sistema.
