@@ -38,14 +38,6 @@ npm start
 ```
 Se abrirá una aplicación web en el navegador que utilizará el puerto 9000 del localhost. Ya podemos interactuar con nuestra interfaz y probar las funcionalidades solicitadas
 
-#### Tests
-
-Utilizando Jest se implementó una prueba unitaria para validar el correcto renderizado de la interfaz. Para realizar la prueba, detener la aplicación web (Ctrl-C) y ejecutar el comando:
-```bash
-npm test
-```
-
-
 ## Uso de funcionalidades opcionales
 Opcionalmente, se solicitaron algunas funcionalidades que podian abordarse de manera opcional. Estas han sido desarrolladas y se presentan a continuación:
 
@@ -80,6 +72,59 @@ Verificar su uso en:
 [toolbox-test/Frontend/toolbox-interfaz/src/App.js ](https://github.com/sergiopostigo/toolbox-test/blob/master/Frontend/toolbox-interfaz/src/App.js)
 
 [toolbox-test/Frontend/toolbox-interfaz/src/components/TextList/TextList.js](https://github.com/sergiopostigo/toolbox-test/blob/master/Frontend/toolbox-interfaz/src/components/TextList/TextList.js)
+
+#### Test unitarios con Jest
+Utilizando Jest se implementó una prueba unitaria para validar el correcto renderizado de la interfaz. Para realizar la prueba, detener la aplicación web (Ctrl-C) y ejecutar el comando:
+```bash
+npm test
+```
+
+## Desarrollo
+En este apartado se describirá paso a paso la conceptualización y desarrollo de la API y el Frontend del proyecto.
+
+### API
+
+Con Node.js versión 12 instalado (específicamente en el proyecto se uso la versión 12.22.1)
+
+Creamos una carpeta para la aplicación, la cual llamaremos toolbox-api
+
+Abrimos una ventana de comandos o terminal en dicha ubicación
+
+Creamos el archivo que controlará los paquetes, dependencias y metadata de la aplicación (package.json)  con el comando:
+```bash
+npm init
+```
+(Le damos enter a todas las opciones que solicita, excepto entry point, allí escribimos: app.js)
+
+Ahora creamos el entry point de la aplicación:
+Dentro de la carpeta toolbox-api, creamos un archivo llamado app.js. Dentro de este archivo y a modo de prueba escribimos:
+```js
+console.log("Hola Toolbox")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
